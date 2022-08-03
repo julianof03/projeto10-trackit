@@ -1,5 +1,6 @@
+import axios from "axios";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 
@@ -8,15 +9,25 @@ import styled from "styled-components";
 export default function LoginScreen(){
     const [email, SetEmail] = useState([]);
     const [password, SetPassword] = useState([]);
-
-    function SubForm(){
+    const navigate = useNavigate();
+    function HandleForm(event){
+        event.preventDefault();
         const body = {
             email,
-            password,
+            password
         };
-        console.log("mandei", body);
-        }
+        const promise = axios.post("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/login", body);
+        promise.then((res) => 
+            navigate('/hoje', {state:{
+                id: res.data.id,
+                name: res.data.name,
+                email: res.data.email,
+                password: res.data.password,
+                token: res.data.token
+            }})
+        );
 
+    }
     return(
     <Container> 
         <div className="logoBox"></div>
@@ -29,7 +40,7 @@ export default function LoginScreen(){
                 onChange={(e) => SetPassword(e.target.value)}
                 value = {password}>
             </input>
-            <button onClick={SubForm}>Entrar</button>
+            <button onClick={HandleForm}>Entrar</button>
         </form> 
             <Link to={"/cadastro"} style={{textDecoration:"none"}}><p className="linkCadastro">Não tem uma conta? Cadastre-se!</p></Link>     
     </Container>);

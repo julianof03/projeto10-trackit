@@ -2,6 +2,7 @@ import { Route, Routes, BrowserRouter } from 'react-router-dom';
 import styled from 'styled-components';
 import LoginScreen from './components/loginscreen';
 import Registration from './components/regscreen';
+import RenderHoje from './components/hoje';
 export default function App() {
 
   return (
@@ -11,6 +12,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<LoginScreen />}></Route>
         <Route path="/cadastro" element={<Registration />}></Route>
+        <Route path="/hoje" element={<RenderHoje />}></Route>
       </Routes>
     </BrowserRouter>
 </Container>

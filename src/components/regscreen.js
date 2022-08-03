@@ -1,21 +1,25 @@
+import axios from "axios";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 export default function Registration(){
     const [email, SetEmail] = useState([]);
     const [password, SetPassword] = useState([]);
     const [nome, SetNome] = useState([]);
     const [foto, SetFoto] = useState([]);
+    const navigate = useNavigate();
 
-    function SubForm(){
+    function SubForm(event){
+        event.preventDefault();
         const body = {
             email,
-            password,
-            nome,
-            foto
+            name: nome,
+            image: foto,
+            password
         };
-        console.log("mandei", body);
-        }
+        const promise = axios.post("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/sign-up", body)
+        promise.then(navigate('/'));
+    }
 
     return(
         <Container> 
@@ -31,7 +35,7 @@ export default function Registration(){
                     onChange={(e) => SetNome(e.target.value)}
                     value = {nome}></input>
                 <input type="text" placeholder="foto"
-                    onChange={(e) => SetFoto(e.target.value)}
+                    onChange={(e) => SetFoto (e.target.value)}
                     value = {foto}></input>
                 <button onClick={SubForm}>Cadastrar</button>
                 <Link to={"/"} style={{textDecoration:"none"}}><p className="linkCadastro">Já tem uma conta? Faça login!</p></Link>
