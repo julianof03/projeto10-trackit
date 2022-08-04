@@ -1,10 +1,15 @@
 import { useLocation } from "react-router-dom";
 import styled from "styled-components";
+import Habitos from "./habitos";
 
 export default function RenderHoje(){
 
     const {state} = useLocation();
     const {id, name, image, email, password, token} = state;
+    function button(){
+        console.log("cliquei");
+    }
+    
     return(
         <Container>
             <div className="topBar">
@@ -15,12 +20,10 @@ export default function RenderHoje(){
                 <div className="criaHabitos">
                     <p>Meus hábitos</p>
 
-                    <div><p> + </p></div>
+                    <div onClick={button}><p> + </p></div>
                     
                 </div>
-                <div className="habbitSpace">
-                    <p>Você não tem nenhum hábito cadastrado ainda. Adicione um hábito para começar a trackear!</p>
-                </div>
+                <Habitos />
             </div>
             <div className="footer">
                 <p>Hábitos</p>
@@ -93,14 +96,6 @@ position:absolute;
         border-radius:5px;
         background-color:#52b6ff;
     }
-}
-.habbitSpace{
-    margin-top:20px;
-    margin-left:20px;
-    margin-right: 20px;
-    font-family: 'Lexend Deca';
-    color:#666666;
-    flex-wrap:wrap;
 }
 .footer{
     width:375px;
