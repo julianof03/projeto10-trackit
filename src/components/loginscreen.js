@@ -21,6 +21,7 @@ export default function LoginScreen(){
             navigate('/hoje', {state:{
                 id: res.data.id,
                 name: res.data.name,
+                image: res.data.image,
                 email: res.data.email,
                 password: res.data.password,
                 token: res.data.token
