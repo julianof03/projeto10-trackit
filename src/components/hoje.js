@@ -1,15 +1,73 @@
 import { useLocation } from "react-router-dom";
 import styled from "styled-components";
+import { useEffect, useState } from "react";
+import axios from "axios";
 import Habitos from "./habitos";
+import { CircularProgressbar } from 'react-circular-progressbar';
+import 'react-circular-progressbar/dist/styles.css';
 
 export default function RenderHoje(){
 
     const {state} = useLocation();
     const {id, name, image, email, password, token} = state;
+    const [days, Setdays] = useState([]);
+    const percentage = 100;
+    const [habarray, SetHabarray] = useState([]);
+    const weekday = [
+        {
+            dayname: 'D',
+            daynumber: 0
+        },
+        {
+            dayname: 'S',
+            daynumber: 1
+        },
+        {
+            dayname: 'T',
+            daynumber: 2
+        },
+        {
+            dayname: 'Q',
+            daynumber: 3
+        },
+        {
+            dayname: 'Q',
+            daynumber: 4
+        },
+        {
+            dayname: 'S',
+            daynumber: 5
+        },
+        {
+            dayname: 'S',
+            daynumber: 6
+        }
+        
+    ]
+    const config = {
+        headers: { Authorization: `Bearer ${token}` }
+    };
+ 
+    useEffect(() => {
+		const promise =  axios.get( 
+            'https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits',
+            config
+          )
+          promise.then((res) =>{
+            SetHabarray(res.data);
+        }
+          );
+	}, []);
     function button(){
-        console.log("cliquei");
+       const promise =  axios.get( 
+            'https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits',
+            config
+          )
+          promise.then((res) =>{
+            SetHabarray(res.data);
+        }
+          );
     }
-    
     return(
         <Container>
             <div className="topBar">
@@ -23,11 +81,38 @@ export default function RenderHoje(){
                     <div onClick={button}><p> + </p></div>
                     
                 </div>
-                <Habitos />
+                <Habitos 
+                token = {token}
+                days = {days}
+                Setdays = {Setdays}/> 
+                {habarray.map((hab)=>
+                <div className="singleHab">
+                    <div>
+                        <p className="habname">{hab.name}</p>
+                        <div className="days">
+                            
+                        {weekday.map((d)=> {
+                            const nhab = hab.days;
+                            const ndays = d.daynumber;
+                            if(nhab.includes(ndays)){
+                                return(<div class="container">                      
+                                <span className="checkmark true">{d.dayname}</span>
+                            </div>);
+
+                            }
+                            else{
+                                return(<div class="container">                      
+                                <span className="checkmark">{d.dayname}</span>
+                            </div>);
+                            }
+                        })}
+                        </div>
+                    </div>
+                </div>)}
             </div>
             <div className="footer">
                 <p>Hábitos</p>
-                <p>Hoje</p>
+                <div className="progressBar"><CircularProgressbar value={percentage} text={`${percentage}%`} /></div>
                 <p>Histórico</p>
             </div>
         </Container>
@@ -99,6 +184,7 @@ position:absolute;
 }
 .footer{
     width:375px;
+    max-height: 40px;
     bottom:0px;
     color:#52B6FF;
     display: flex;
@@ -106,7 +192,68 @@ position:absolute;
     align-items: center;
     background-color: #ffffff;
     justify-content: space-around;
+    .progressBar{
+        background-color:#ffffff;
+        border-radius:60px;
+        width: 110px;
+        height:110px;
+    }
 }
+.singleHab{
+    margin-top: 20px;
+    margin-left:20px;
+    margin-right: 20px;
+    width: 340px;
+    height:91px;
+    display:flex;
+    flex-direction: column;
+    align-items:center;
+    justify-content:center;
+    background-color:#ffffff;
+    font-family: 'Lexend Deca';
+    flex-wrap:wrap;
+    border-radius:5px;
+    .habname{
+        margin-top:-15px;
+        width:295px;
+        color:#666666;
+        font-weight:400;
+    }
+    .days{
+        margin-top:-8px;
+        display:flex;
+        .container {
+                display: flex;
+                align-items:center;
+                justify-content:center;
+                position: relative;
+                padding-left: 35px;
+                margin-bottom: 12px;
+            }
+
+            .checkmark {
+                display:flex;
+                align-items: center;
+                justify-content:center;
+                position: absolute;
+                top: 0;
+                left: 0;
+                height: 25px;
+                width: 25px;
+                background-color: #ffffff;
+                border-radius: 5px;
+                border-width:1px;
+                color:#dfdfdf;
+                border-style:solid;
+            }
+            .true{
+                color: #FFFFFF;
+                background-color: #CFCFCF;
+            }
+    }
+}
+            
+        
 
 
 
