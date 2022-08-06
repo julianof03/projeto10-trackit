@@ -4,12 +4,19 @@ import LoginScreen from './components/loginscreen';
 import Registration from './components/regscreen';
 import RenderHoje from './components/hoje';
 import UserContext from "./contexts/UserContext";
+import { useState } from 'react';
+
 export default function App() {
 
   const babao = 405020;
+  const [stateaba, SetStateaba] = useState(false);
 
   return (
-    <UserContext.Provider value={{babao}}>
+    <UserContext.Provider value={{
+      babao,
+      stateaba,
+      SetStateaba,
+      }}>
   <Container>
     <BrowserRouter>
       <Routes>

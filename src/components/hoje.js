@@ -13,7 +13,7 @@ export default function RenderHoje(){
 
     const {state} = useLocation();
     const {id, name, image, email, password, token} = state;
-    const { babao } = useContext(UserContext);
+    const { babao, stateaba, SetStateaba } = useContext(UserContext);
     const [days, Setdays] = useState([]);
     const percentage = 40;
     const [habarray, SetHabarray] = useState([]);
@@ -63,16 +63,20 @@ export default function RenderHoje(){
           );
 	}, []);
     function button(){
-       const promise =  axios.get( 
-            'https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits',
+        SetStateaba(!stateaba);
+       console.log(stateaba);
+    }
+    function deletebutton(bob){
+       const promise =  axios.delete( 
+            `https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${bob}`,
             config
           )
           promise.then((res) =>{
-            SetHabarray(res.data);
-        }
+            console.log(res);     
+       }
           );
+       console.log("hey");
     }
-    console.log(babao);
     return(
         <Container>
             <div className="topBar">
@@ -86,50 +90,40 @@ export default function RenderHoje(){
                     <div onClick={button}><p> + </p></div>
                     
                 </div>
-                {() => {
-                        if(habarray.length === 0){
-                            return(
+                <Habitos 
+                    token = {token}
+                    days = {days}
+                    Setdays = {Setdays}/>
+                {
+                    habarray.map((hab)=> 
+                        <div className="singleHab">
                             <div>
-                                ue
-                            </div>);
-                        }else{
-                            return(<div>
-                                {
-                                    habarray.map((hab)=> 
-                                    <div className="singleHab">
-                                            <div>
-                                                <p className="habname">{hab.name} {hab.id}</p>
-                                                <div className="days">
-                                                    
-                                                {weekday.map((d)=> {
-                                                    const nhab = hab.days;
-                                                    const ndays = d.daynumber;
-                                                    if(nhab.includes(ndays)){
-                                                        return(<div class="container">                      
-                                                        <span className="checkmark true">{d.dayname}</span>
-                                                    </div>);
-                
-                                                    }
-                                                    else{
-                                                        return(<div class="container">                      
-                                                        <span className="checkmark">{d.dayname}</span>
-                                                    </div>);
-                                                    }
-                                                })}
-                                                </div>
-                                            </div>
-                                            <div className="deletebutton">oi</div>
-                                        </div>
-                                        )
-                                }
-                            </div>)
-                        }
-                    }
+                                <p className="habname">{hab.name} {hab.id}</p>
+                                <div className="days">                                                   
+                                    {weekday.map((d)=> {
+                                        const nhab = hab.days;
+                                        const ndays = d.daynumber;
+                                        if(nhab.includes(ndays)){
+                                            return(
+                                                <div class="container">                      
+                                                    <span className="checkmark true">{d.dayname}</span>
+                                                </div>);
+                                            }
+                                        else{
+                                            return(
+                                                <div class="container">                      
+                                                    <span className="checkmark">{d.dayname}</span>
+                                                </div>);
+                                            }
+                                            })}
+                                </div>
+                            </div>
+                            <div className="deletebutton" onClick={() => {deletebutton(hab.id)}}>lixo</div>
+
+                        </div>
+                        
+                    )
                 }
-                {/* <Habitos 
-                token = {token}
-                days = {days}
-                Setdays = {Setdays}/>  */}
 
             </div>
             <div className="footer">
@@ -273,6 +267,9 @@ position:absolute;
                 color: #FFFFFF;
                 background-color: #CFCFCF;
             }
+    }   
+    .deletebutton{
+        background-color: aliceblue;
     }
 }
 .deletebutton{

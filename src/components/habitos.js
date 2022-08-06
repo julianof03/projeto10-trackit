@@ -10,7 +10,7 @@ export default function Habitos({
     Setdays,
     token
 }){
-    const { babao } = useContext(UserContext);
+    const { babao, stateaba, SetStateaba } = useContext(UserContext);
     const weekday = [
         {
             dayname: 'D',
@@ -63,37 +63,37 @@ export default function Habitos({
            );
         console.log("hey");
     }
-    
-    return( 
-    <Container>
-        <div>
-            <input placeholder="nome do hábito" onChange={(e)=>{Sethabbiname(e.target.value);}}></input>
-            <div className="days">
-
-
-                {weekday.map((d)=> 
-            <label class="container">
-                <input type="checkbox"/>
-                <span className="checkmark" onClick={() => {        
-                    const newarrfilter = daysarr => daysarr !== d.daynumber;
-                    const newarr = days.filter(newarrfilter);
-                    const daynerarr = [...newarr, d.daynumber];
-                    Setdays(daynerarr);
-                }}>{d.dayname}</span>
-              </label>)}
-            <div></div>
-
-            </div>
-            <div className="savestate">
-                <button className="cancelar">Cancelar</button>
-                <button className="salvar" onClick={Save}>Salvar</button>
-            </div>
-        </div>
-        {
-        /* <p>Você não tem nenhum hábito cadastrado ainda. 
-        Adicione um hábito para começar a trackear!</p> */}
-    </Container>
-    );
+    if(stateaba){
+        return( 
+            <Container>
+                <div>
+                    <input placeholder="nome do hábito" onChange={(e)=>{Sethabbiname(e.target.value);}}></input>
+                    <div className="days">
+        
+        
+                        {weekday.map((d)=> 
+                    <label class="container">
+                        <input type="checkbox"/>
+                        <span className="checkmark" onClick={() => {        
+                            const newarrfilter = daysarr => daysarr !== d.daynumber;
+                            const newarr = days.filter(newarrfilter);
+                            const daynerarr = [...newarr, d.daynumber];
+                            Setdays(daynerarr);
+                        }}>{d.dayname}</span>
+                      </label>)}
+                    <div></div>
+        
+                    </div>
+                    <div className="savestate">
+                        <button className="cancelar">Cancelar</button>
+                        <button className="salvar" onClick={Save}>Salvar</button>
+                    </div>
+                </div>
+                {
+                /* <p>Você não tem nenhum hábito cadastrado ainda. 
+                Adicione um hábito para começar a trackear!</p> */}
+            </Container>)
+    }
 }
 const Container = styled.div`
     margin-top: 20px;
