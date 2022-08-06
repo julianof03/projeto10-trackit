@@ -2,13 +2,15 @@ import { useState } from "react";
 import styled from "styled-components";
 import React from "react";
 import axios from "axios";
+import { useContext } from "react";
+import UserContext from "../contexts/UserContext";
 
 export default function Habitos({
     days,
     Setdays,
     token
 }){
-
+    const { babao } = useContext(UserContext);
     const weekday = [
         {
             dayname: 'D',
@@ -48,19 +50,20 @@ export default function Habitos({
     
     function Save(){
         const body = {
-            name: habbitname,
-            days: days
+             name: habbitname,
+             days: days
         }
         const promise =  axios.post( 
-            'https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits',
-            body ,config
-          )
-          promise.then((res) =>{
-            console.log(res);     
+             'https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits',
+             body ,config
+           )
+           promise.then((res) =>{
+             console.log(res);     
         }
-          );
+           );
+        console.log("hey");
     }
-
+    
     return( 
     <Container>
         <div>

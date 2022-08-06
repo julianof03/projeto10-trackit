@@ -6,12 +6,16 @@ import Habitos from "./habitos";
 import { CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 
+import { useContext } from "react";
+import UserContext from "../contexts/UserContext";
+
 export default function RenderHoje(){
 
     const {state} = useLocation();
     const {id, name, image, email, password, token} = state;
+    const { babao } = useContext(UserContext);
     const [days, Setdays] = useState([]);
-    const percentage = 100;
+    const percentage = 40;
     const [habarray, SetHabarray] = useState([]);
     const weekday = [
         {
@@ -68,6 +72,7 @@ export default function RenderHoje(){
         }
           );
     }
+    console.log(babao);
     return(
         <Container>
             <div className="topBar">
@@ -81,34 +86,51 @@ export default function RenderHoje(){
                     <div onClick={button}><p> + </p></div>
                     
                 </div>
-                <Habitos 
+                {() => {
+                        if(habarray.length === 0){
+                            return(
+                            <div>
+                                ue
+                            </div>);
+                        }else{
+                            return(<div>
+                                {
+                                    habarray.map((hab)=> 
+                                    <div className="singleHab">
+                                            <div>
+                                                <p className="habname">{hab.name} {hab.id}</p>
+                                                <div className="days">
+                                                    
+                                                {weekday.map((d)=> {
+                                                    const nhab = hab.days;
+                                                    const ndays = d.daynumber;
+                                                    if(nhab.includes(ndays)){
+                                                        return(<div class="container">                      
+                                                        <span className="checkmark true">{d.dayname}</span>
+                                                    </div>);
+                
+                                                    }
+                                                    else{
+                                                        return(<div class="container">                      
+                                                        <span className="checkmark">{d.dayname}</span>
+                                                    </div>);
+                                                    }
+                                                })}
+                                                </div>
+                                            </div>
+                                            <div className="deletebutton">oi</div>
+                                        </div>
+                                        )
+                                }
+                            </div>)
+                        }
+                    }
+                }
+                {/* <Habitos 
                 token = {token}
                 days = {days}
-                Setdays = {Setdays}/> 
-                {habarray.map((hab)=>
-                <div className="singleHab">
-                    <div>
-                        <p className="habname">{hab.name}</p>
-                        <div className="days">
-                            
-                        {weekday.map((d)=> {
-                            const nhab = hab.days;
-                            const ndays = d.daynumber;
-                            if(nhab.includes(ndays)){
-                                return(<div class="container">                      
-                                <span className="checkmark true">{d.dayname}</span>
-                            </div>);
+                Setdays = {Setdays}/>  */}
 
-                            }
-                            else{
-                                return(<div class="container">                      
-                                <span className="checkmark">{d.dayname}</span>
-                            </div>);
-                            }
-                        })}
-                        </div>
-                    </div>
-                </div>)}
             </div>
             <div className="footer">
                 <p>Hábitos</p>
@@ -200,6 +222,7 @@ position:absolute;
     }
 }
 .singleHab{
+    position:relative;
     margin-top: 20px;
     margin-left:20px;
     margin-right: 20px;
@@ -252,18 +275,17 @@ position:absolute;
             }
     }
 }
-            
-        
-
-
-
-
+.deletebutton{
+    position:absolute;
+    right:10px;
+    top:10px;
+}
 @font-face {
   font-family: 'Playball';
   font-style: normal;
   font-weight: 400;
   src: local(''),
-       url('../fonts/playball-v16-latin-regular.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
-       url('../fonts/playball-v16-latin-regular.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+       url('../fonts/playball-v16-latin-regular.woff2') format('woff2'),
+       url('../fonts/playball-v16-latin-regular.woff') format('woff');
 }
 `;

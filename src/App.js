@@ -3,19 +3,23 @@ import styled from 'styled-components';
 import LoginScreen from './components/loginscreen';
 import Registration from './components/regscreen';
 import RenderHoje from './components/hoje';
+import UserContext from "./contexts/UserContext";
 export default function App() {
 
-  return (
+  const babao = 405020;
 
+  return (
+    <UserContext.Provider value={{babao}}>
   <Container>
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<LoginScreen />}></Route>
-        <Route path="/cadastro" element={<Registration />}></Route>
-        <Route path="/hoje" element={<RenderHoje />}></Route>
+          <Route path="/" element={<LoginScreen />}></Route>
+          <Route path="/cadastro" element={<Registration />}></Route>
+          <Route path="/hoje" element={<RenderHoje />}></Route>
       </Routes>
     </BrowserRouter>
 </Container>
+</UserContext.Provider>
   );
 }
 
