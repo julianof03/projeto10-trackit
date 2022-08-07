@@ -2,12 +2,15 @@ import axios from "axios";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
+
 export default function Registration(){
     const [email, SetEmail] = useState([]);
     const [password, SetPassword] = useState([]);
     const [nome, SetNome] = useState([]);
     const [foto, SetFoto] = useState([]);
     const navigate = useNavigate();
+    const [disbleinput, SetDisbleinput] = useState('');
+    const [loading, SetLoading] = useState(false);
 
     function SubForm(event){
         event.preventDefault();
@@ -17,10 +20,17 @@ export default function Registration(){
             image: foto,
             password
         };
+        WaitResponse();
         const promise = axios.post("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/sign-up", body)
-        promise.then(navigate('/'));
+        promise.then(() => navigate("/"));
+        promise.catch(() => alert("Algo deu errado :( tente novamente"));
     }
-
+    function WaitResponse(){
+        SetLoading(true);
+        if(loading){
+            SetDisbleinput("disable");
+        }
+    }
     return(
         <Container> 
             <div className="logoBox"></div>
@@ -80,6 +90,7 @@ export default function Registration(){
     }
     
     button{
+        
         width:309px;
         height: 45px;
         font-size:28px;
