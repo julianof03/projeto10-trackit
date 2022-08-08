@@ -11,9 +11,12 @@ import UserContext from "./contexts/UserContext";
 
 export default function App() {
 
-  const babao = 405020;
   const [stateaba, SetStateaba] = useState(false);
   const [percentage, setPercentage] = useState(0);
+  const [habarray, SetHabarray] = useState([]);
+  const [days, Setdays] = useState([]);
+  const [token, SetToken] = useState('');
+  const [image, SetImage] = useState('');
   const weekday = [
     {
         dayname: 'D',
@@ -48,12 +51,13 @@ export default function App() {
 
   return (
     <UserContext.Provider value={{
-      babao,
-      stateaba,
-      SetStateaba,
+      stateaba,   SetStateaba,
       weekday,
-      percentage,
-      setPercentage
+      percentage, setPercentage,
+      habarray,   SetHabarray,
+      days,       Setdays,
+      token ,     SetToken,
+      image,      SetImage
       }}>
   <Container>
     <BrowserRouter>

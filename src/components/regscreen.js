@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import React from "react";
 import tracked from "./images/tracked.jpeg";
+import { ThreeDots } from  'react-loader-spinner';
 
 export default function Registration(){
     const [email, SetEmail] = useState([]);
@@ -24,8 +25,12 @@ export default function Registration(){
         };
         WaitResponse();
         const promise = axios.post("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/sign-up", body)
-        promise.then(() => navigate("/"));
-        promise.catch(() => alert("Algo deu errado :( tente novamente"));
+        promise.then(() => {
+            SetLoading(false);
+            navigate("/")});
+        promise.catch(() => {
+            SetLoading(false);
+            alert("Algo deu errado :( tente novamente")});
     }
     function WaitResponse(){
         SetLoading(true);
@@ -49,7 +54,8 @@ export default function Registration(){
                 <input type="text" placeholder="foto"
                     onChange={(e) => SetFoto (e.target.value)}
                     value = {foto}></input>
-                <button onClick={SubForm}>Cadastrar</button>
+                <Responde loading = {loading} onClick={SubForm}><ThreeDots color="#ffffff"  height={80} width={80} display={"none"} visible={loading}/>
+                <p>Cadastrar</p></Responde>
                 <Link to={"/"} style={{textDecoration:"none"}}><p className="linkCadastro">Já tem uma conta? Faça login!</p></Link>
             </form>
             
@@ -110,4 +116,32 @@ export default function Registration(){
         color:#52B6FF;
         text-decoration: underline;
     }
+    `;
+    const Responde = styled.div`
+    display:flex;
+    align-items:center;
+    justify-content:center;
+        width:309px;
+        height: 45px;
+        font-size:28px;
+        color: #ffffff;
+        background-color: ${({loading})=> {
+            if(loading){
+                return("#86cdff");
+                }
+                else{
+                    return("#52B6FF");}
+                }} ;
+        border-radius: 5px; 
+        border-width: 0px;
+        border-style: solid;
+        margin-bottom: 6px;
+        p{
+            display:${({loading})=> {
+            if(loading){
+                return("none");
+                }
+                else{
+                    return("flex");}
+                }}};
     `;

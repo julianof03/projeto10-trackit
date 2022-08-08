@@ -61,7 +61,7 @@ display:flex;
 flex-direction:column;
 background-color: #f2f2f2;
 width:375px;
-height: 667px;
+height: 700px;
 position:absolute;
 .criaHabitos{
     margin-top:70px;
@@ -83,7 +83,7 @@ position:absolute;
 }
 .footer{
     width:375px;
-    max-height: 40px;
+    max-height: 100px;
     bottom:0px;
     color:#52B6FF;
     display: flex;
@@ -92,6 +92,8 @@ position:absolute;
     background-color: #ffffff;
     justify-content: space-around;
     .progressBar{
+        position: absolute;
+        bottom:0px;
         font-size:17px;
         background-color:#52b6ff;
         border-radius:60px;

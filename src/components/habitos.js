@@ -2,6 +2,7 @@ import styled from "styled-components";
 import axios from "axios";
 import Topbar from './topbar';
 import CreateHabitos from "./createHab";
+import HabBox from "./habbox";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { CircularProgressbar, buildStyles} from 'react-circular-progressbar';
@@ -10,12 +11,12 @@ import { useContext } from "react";
 import UserContext from "../contexts/UserContext";
 
 export default function RenderHoje(){
-
+    const {
+        SetStateaba, percentage,
+        SetHabarray, days, Setdays,
+    } = useContext(UserContext);
     const {state} = useLocation();
     const {image, token} = state;
-    const {SetStateaba, weekday, percentage} = useContext(UserContext);
-    const [days, Setdays] = useState([]);
-    const [habarray, SetHabarray] = useState([]);
     const navigate = useNavigate();
     const config = {
         headers: { Authorization: `Bearer ${token}` }
@@ -34,27 +35,9 @@ export default function RenderHoje(){
     function Statebutton(){
         SetStateaba(true);
     }
-    function deletebutton(id){
-       const promise =  axios.delete( 
-            `https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${id}`,
-            config
-          )
-          promise.then((res) =>{
-            console.log(res);  
-            document.location.reload();   
-       }
-          );
-    }
-    function titlemessage(){
-        if(habarray.length != 0){
-            return("");  
-        }else{
-            return('Você não tem nenhum hábito cadastrado ainda. Adicione um hábito para começar a trackear!');
-        }
-    }
     return(
         <Container>
-            <Topbar image = {image}/>
+            <Topbar image={image}/>
             <div>
                 <div className="criaHabitos">
                     <p>Meus hábitos</p>
@@ -66,35 +49,7 @@ export default function RenderHoje(){
                     token = {token}
                     days = {days}
                     Setdays = {Setdays}/>
-                <div className="HabBox">{habarray.map((hab)=> 
-                        <div className="singleHab">
-                            <div>
-                                <p className="habname">{hab.name}</p>
-                                <div className="days">                                                   
-                                    {weekday.map((d)=> {
-                                        const nhab = hab.days;
-                                        const ndays = d.daynumber;
-                                        if(nhab.includes(ndays)){
-                                            return(
-                                                <div class="container">                      
-                                                    <span className="checkmark true">{d.dayname}</span>
-                                                </div>);
-                                            }
-                                        else{
-                                            return(
-                                                <div class="container">                      
-                                                    <span className="checkmark">{d.dayname}</span>
-                                                </div>);
-                                            }
-                                            })}
-                                </div>
-                            </div>
-                            <div className="deletebutton" onClick={() => window.confirm("Tem Certeza?") ? deletebutton(hab.id)  : null}><ion-icon name="trash-outline"></ion-icon></div>
-
-                        </div>
-                        
-                )}
-                <div className="nulltext">{titlemessage()}</div></div>
+                <HabBox token = {token}/>
 
             </div>
             <div className="footer">
@@ -137,8 +92,9 @@ display:flex;
 flex-direction:column;
 background-color: #f2f2f2;
 width:375px;
-height: 667px;
+height: 700px;
 position:absolute;
+overflow-y:hidden;
 .criaHabitos{
     padding-left:20px;
     padding-right:20px;
@@ -165,8 +121,9 @@ position:absolute;
         background-color:#52b6ff;
     }
 }
-.HabBox{
-    height:500px;
+.HabBox{   
+    height: 510px;
+    width:375px;
     overflow-y:scroll;
 }
 .nulltext{
@@ -182,7 +139,7 @@ position:absolute;
 }
 .footer{
     width:375px;
-    max-height: 40px;
+    max-height: 100px;
     bottom:0px;
     color:#52B6FF;
     display: flex;
@@ -191,6 +148,8 @@ position:absolute;
     background-color: #ffffff;
     justify-content: space-around;
     .progressBar{
+        position: absolute;
+        bottom:0px;
         font-size:17px;
         background-color:#52b6ff;
         border-radius:60px;
@@ -201,9 +160,8 @@ position:absolute;
 .singleHab{
     position:relative;
     margin-top: 20px;
-    margin-left:20px;
-    margin-right: 20px;
-    width: 340px;
+    margin-left:25px;
+    width: 320px;
     height:91px;
     display:flex;
     flex-direction: column;

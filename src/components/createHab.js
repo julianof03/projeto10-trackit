@@ -3,6 +3,7 @@ import React from "react";
 import axios from "axios";
 import { useState } from "react";
 import { useContext } from "react";
+import { ThreeDots } from  'react-loader-spinner';
 import UserContext from "../contexts/UserContext";
 
 export default function CreateHabitos({
@@ -33,8 +34,15 @@ export default function CreateHabitos({
              SetLoading(false);
              SetDisbleinput("");
              document.location.reload();  
-        }
+            }
            );
+           promise.catch((res) =>{
+            console.log(res);
+            SetLoading(false);
+            SetDisbleinput("");
+            alert("algo deu errado com seu hábito, tente novamente");
+           }
+          );
     }
     function WaitResponse(){
         SetLoading(true);
@@ -83,7 +91,9 @@ export default function CreateHabitos({
                     </div>
                     <div className="savestate">
                         <Cancelbutton onClick={() => SetStateaba(false)} loading = {loading}>Cancelar</Cancelbutton>
-                        <Savebutton onClick={Save} loading = {loading}>Salvar</Savebutton>
+                        <Savebutton onClick={Save} loading = {loading}>
+                        <ThreeDots color="#ffffff"  height={80} width={80} display={"none"} visible={loading}/>
+                          <p>Salvar</p></Savebutton>
                     </div>
                 </div>
                 {
@@ -245,4 +255,15 @@ const Savebutton = styled.div`
                 return("#52B6FF");}
             }};
     color:#ffffff;
+
+    p{
+        display:${({loading})=> {
+        if(loading){
+            return("none");
+            }
+            else{
+                return("flex");}
+            }};;
+    }
+
 `;

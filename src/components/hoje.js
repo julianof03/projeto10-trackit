@@ -86,8 +86,8 @@ export default function Hoje(){
                         <div key={hab.id} className="singleHab">
                             <div>
                                 <p className="habname">{hab.name}</p>
-                                <p className="sequence">Sequência atual: {hab.currentSequence} dias</p>
-                                <p className="sequence">Seu recorde: {hab.highestSequence} dias</p>
+                            <div className="sequencebox"><p className="sequencetext">Sequência atual: </p> <Sequence hab={habarray}> {hab.currentSequence} dias</Sequence></div>
+                            <div className="sequencebox"><p className="sequencetext">Seu recorde:  </p> <Highsequence hab={habarray}> {hab.highestSequence} dias</Highsequence></div>
                             </div>
                             
                                 <Label done = {hab.done}>
@@ -149,16 +149,15 @@ display:flex;
 flex-direction:column;
 background-color: #f2f2f2;
 width:375px;
-height: 667px;
+height: 700px;
 position:absolute;
 .singleHab{
     
     position:relative;
     margin-top: 0px;
     margin-bottom:10px;
-    margin-left:20px;
-    margin-right: 20px;
-    width: 332px;
+    margin-left:25px;
+    width: 330px;
     padding-left:8px;
     height:91px;
     display:flex;
@@ -176,16 +175,20 @@ position:absolute;
         color:#666666;
         font-weight:400;
     }
-    .sequence {
+    .sequencebox{
+        display:flex;
+        width:200px;
+    }
+    .sequencetext{
         font-size:12px;
         margin-top:0px;
         margin-bottom:0px;
-        color:#666666;
+        color: #666666;
     }
     
 }  
 .HabBox{
-    height:500px;
+    height:510px;
     overflow-y:scroll;
 }
 .ThreeDots{
@@ -193,7 +196,7 @@ position:absolute;
 }
 .footer{
     width:375px;
-    max-height: 40px;
+    max-height: 100px;
     bottom:0px;
     color:#52B6FF;
     display: flex;
@@ -202,6 +205,8 @@ position:absolute;
     background-color: #ffffff;
     justify-content: space-around;
     .progressBar{
+        position: absolute;
+        bottom:0px;
         font-size:17px;
         background-color:#52b6ff;
         border-radius:60px;
@@ -300,4 +305,32 @@ const Label = styled.div`
     }
 
 
+`;
+const Sequence = styled.div`
+margin-left:5px;
+        font-size:12px;
+        margin-top:0px;
+        margin-bottom:0px;
+        color:${(hab)=>{
+            if(!(hab.hab[0].done)){
+                return("#666666");
+            }
+            else{
+                return("#8fc549");
+            }
+        }};
+`;
+const Highsequence = styled.div`
+    margin-left:5px;
+    font-size:12px;
+    margin-top:0px;
+    margin-bottom:0px;
+    color:${(hab)=>{
+            if(hab.hab[0].currentSequence === hab.hab[0].highestSequence){
+                return("#8fc549");
+            }
+            else{
+                return("#666666");
+            }
+        }};
 `;
