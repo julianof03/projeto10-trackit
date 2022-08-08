@@ -1,17 +1,19 @@
 import { Route, Routes, BrowserRouter } from 'react-router-dom';
+import { useState } from 'react';
 import styled from 'styled-components';
 import LoginScreen from './components/loginscreen';
 import Registration from './components/regscreen';
 import RenderHoje from './components/habitos';
 import Hoje from './components/hoje';
+import Historico from './components/historico';
 import UserContext from "./contexts/UserContext";
-import { useState } from 'react';
 
 
 export default function App() {
 
   const babao = 405020;
   const [stateaba, SetStateaba] = useState(false);
+  const [percentage, setPercentage] = useState(0);
   const weekday = [
     {
         dayname: 'D',
@@ -49,7 +51,9 @@ export default function App() {
       babao,
       stateaba,
       SetStateaba,
-      weekday
+      weekday,
+      percentage,
+      setPercentage
       }}>
   <Container>
     <BrowserRouter>
@@ -58,6 +62,7 @@ export default function App() {
           <Route path="/cadastro" element={<Registration />}></Route>
           <Route path="/hoje" element={<Hoje />}></Route>
           <Route path="/habitos" element={<RenderHoje />}></Route>
+          <Route path="/historico" element={<Historico />}></Route>
       </Routes>
     </BrowserRouter>
 </Container>

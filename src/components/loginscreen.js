@@ -3,7 +3,8 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { ThreeDots } from  'react-loader-spinner';
-
+import React from "react";
+import tracked from "./images/tracked.jpeg";
 
 
 export default function LoginScreen(){
@@ -21,7 +22,7 @@ export default function LoginScreen(){
         WaitResponse();
         const promise = axios.post("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/login", body);
         promise.then((res) => {
-            navigate('/habitos', {state:{
+            navigate('/hoje', {state:{
                 id: res.data.id,
                 name: res.data.name,
                 image: res.data.image,
@@ -31,6 +32,7 @@ export default function LoginScreen(){
                 }
                 );
         promise.catch(() => {
+            alert("algo deu errado tente novamente");
             SetLoading(false);
             SetDisbleinput("");
         })
@@ -44,7 +46,7 @@ export default function LoginScreen(){
     }
     return(
     <Container> 
-        <div className="logoBox"></div>
+        <div className="logoBox"> <img src={tracked} alt="logo"/> </div>
         <form className="loginBox">
             <input disabled={disbleinput} type="email" placeholder="email"
                 onChange={(e) => SetEmail(e.target.value)}
@@ -65,13 +67,15 @@ export default function LoginScreen(){
 const Container = styled.div`
 width: 375px;
 height: 667px;
-border-width: 1px;
-border-style: solid;
 border-color: #D4D4D4;
 display: flex;
 flex-direction: column;
 align-items: center;
 justify-content: flex-start;
+img{
+    width: 180px;
+    height:180px;
+}
 .ThreeDots{
     background-color:red;
 }

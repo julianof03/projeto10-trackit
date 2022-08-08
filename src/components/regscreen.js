@@ -2,6 +2,8 @@ import axios from "axios";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import React from "react";
+import tracked from "./images/tracked.jpeg";
 
 export default function Registration(){
     const [email, SetEmail] = useState([]);
@@ -33,7 +35,7 @@ export default function Registration(){
     }
     return(
         <Container> 
-            <div className="logoBox"></div>
+            <div className="logoBox"> <img src={tracked} alt="logo"/></div>
             <form className="loginBox">
                 <input type="email" placeholder="email"
                     onChange={(e) => SetEmail(e.target.value)}
@@ -56,13 +58,16 @@ export default function Registration(){
     const Container = styled.div`
     width: 375px;
     height: 667px;
-    border-width: 1px;
-    border-style: solid;
+
     border-color: #D4D4D4;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
+    img{
+    width: 180px;
+    height:180px;
+}
     .loginBox{
         margin-bottom: 40px;
         display: flex;

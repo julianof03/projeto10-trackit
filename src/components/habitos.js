@@ -1,11 +1,11 @@
-import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { useEffect, useState } from "react";
 import axios from "axios";
+import Topbar from './topbar';
 import CreateHabitos from "./createHab";
-import { CircularProgressbar } from 'react-circular-progressbar';
+import { useLocation, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { CircularProgressbar, buildStyles} from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
-
 import { useContext } from "react";
 import UserContext from "../contexts/UserContext";
 
@@ -13,8 +13,7 @@ export default function RenderHoje(){
 
     const {state} = useLocation();
     const {image, token} = state;
-    const {SetStateaba, weekday} = useContext(UserContext);
-    const percentage = 40;
+    const {SetStateaba, weekday, percentage} = useContext(UserContext);
     const [days, Setdays] = useState([]);
     const [habarray, SetHabarray] = useState([]);
     const navigate = useNavigate();
@@ -35,9 +34,9 @@ export default function RenderHoje(){
     function Statebutton(){
         SetStateaba(true);
     }
-    function deletebutton(bob){
+    function deletebutton(id){
        const promise =  axios.delete( 
-            `https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${bob}`,
+            `https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${id}`,
             config
           )
           promise.then((res) =>{
@@ -46,12 +45,16 @@ export default function RenderHoje(){
        }
           );
     }
+    function titlemessage(){
+        if(habarray.length != 0){
+            return("");  
+        }else{
+            return('Você não tem nenhum hábito cadastrado ainda. Adicione um hábito para começar a trackear!');
+        }
+    }
     return(
         <Container>
-            <div className="topBar">
-                <p>trackit</p>
-                <div><img src={image} alt="profile"/></div>
-            </div>
+            <Topbar image = {image}/>
             <div>
                 <div className="criaHabitos">
                     <p>Meus hábitos</p>
@@ -63,8 +66,7 @@ export default function RenderHoje(){
                     token = {token}
                     days = {days}
                     Setdays = {Setdays}/>
-                {
-                    habarray.map((hab)=> 
+                <div className="HabBox">{habarray.map((hab)=> 
                         <div className="singleHab">
                             <div>
                                 <p className="habname">{hab.name}</p>
@@ -87,21 +89,45 @@ export default function RenderHoje(){
                                             })}
                                 </div>
                             </div>
-                            <div className="deletebutton" onClick={() => window.confirm("Tem Certeza?") ? deletebutton(hab.id)  : null}>lixo</div>
+                            <div className="deletebutton" onClick={() => window.confirm("Tem Certeza?") ? deletebutton(hab.id)  : null}><ion-icon name="trash-outline"></ion-icon></div>
 
                         </div>
                         
-                    )
-                }
+                )}
+                <div className="nulltext">{titlemessage()}</div></div>
 
             </div>
             <div className="footer">
-                <p onClick={() => {navigate('/hoje', {state:{
+                <p>Hábitos</p>
+                <div className="progressBar" onClick={() => {navigate('/hoje', {state:{
                 image: image,
                 token: token}})
-                }}>Hábitos</p>
-                <div className="progressBar"><CircularProgressbar value={percentage} text={`Hoje`} /></div>
-                <p>Histórico</p>
+                }}><CircularProgressbar value={percentage} background={true} backgroundPadding={6} text={`Hoje`} styles={buildStyles({
+                        // Rotation of path and trail, in number of turns (0-1)
+                        rotation: 0,
+
+                        // Whether to use rounded or flat corners on the ends - can use 'butt' or 'round'
+
+                        // Text size
+                        textSize: '16px',
+
+                        // How long animation takes to go from one percentage to another, in seconds
+                        pathTransitionDuration: 0.5,
+
+                        // Can specify path transition in more detail, or remove it entirely
+                        // pathTransition: 'none',
+
+                        // Colors
+                        pathColor: `#ffffff`,
+                        textColor: '#ffffff',
+                        trailColor: '#52b6ff',
+                        backgroundColor: '#52b6ff',
+                    })}
+                    /></div>
+                <p onClick={() => {navigate('/historico', {state:{
+                image: image,
+                token: token}})
+                }}>Histórico</p>
             </div>
         </Container>
     );
@@ -113,37 +139,6 @@ background-color: #f2f2f2;
 width:375px;
 height: 667px;
 position:absolute;
-.topBar{
-    width: 375px;
-    height: 70px;
-    position: fixed;
-    top: 0px;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    background-color:#126ba5;
-        p{
-            font-family: 'Playball';
-            font-style: normal;
-            color: #ffffff;
-            font-size: 49px;
-            margin-left: 18px;
-        }
-        div{
-            display: flex;
-            align-items:center;
-            justify-content:center;
-            border-radius: 50px;
-            width: 51px;
-            height: 51px;
-            overflow: hidden;
-            margin-right: 18px;
-            img{
-                width: 100px;
-                height: 51px;
-            }
-        }
-}
 .criaHabitos{
     padding-left:20px;
     padding-right:20px;
@@ -170,6 +165,21 @@ position:absolute;
         background-color:#52b6ff;
     }
 }
+.HabBox{
+    height:500px;
+    overflow-y:scroll;
+}
+.nulltext{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:flex-start;
+    font-family: 'Lexend Deca';
+    margin-top:20px;
+    height: 100px;
+    color:#666666;
+    margin-left:15px;
+}
 .footer{
     width:375px;
     max-height: 40px;
@@ -181,10 +191,11 @@ position:absolute;
     background-color: #ffffff;
     justify-content: space-around;
     .progressBar{
-        background-color:#ffffff;
+        font-size:17px;
+        background-color:#52b6ff;
         border-radius:60px;
-        width: 110px;
-        height:110px;
+        width: 91px;
+        height:91px;
     }
 }
 .singleHab{
@@ -241,14 +252,12 @@ position:absolute;
             }
     }   
     .deletebutton{
-        background-color: aliceblue;
-    }
-}
-.deletebutton{
     position:absolute;
-    right:10px;
-    top:10px;
+    right:20px;
+    top:20px;
 }
+}
+
 @font-face {
   font-family: 'Playball';
   font-style: normal;
